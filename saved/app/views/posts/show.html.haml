@@ -1,0 +1,57 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @post.title
+%p
+  %b Name:
+  = @post.name
+%p
+  %b Selftext html:
+  = @post.selftext_html
+%p
+  %b Selftext:
+  = @post.selftext
+%p
+  %b Author:
+  = @post.author
+%p
+  %b Subreddit:
+  = @post.subreddit
+%p
+  %b Permalink:
+  = @post.permalink
+%p
+  %b Url:
+  = @post.url
+%p
+  %b Domain:
+  = @post.domain
+%p
+  %b Created utc:
+  = @post.created_utc
+%p
+  %b Num comments:
+  = @post.num_comments
+%p
+  %b Likes:
+  = @post.likes
+%p
+  %b Ups:
+  = @post.ups
+%p
+  %b Downs:
+  = @post.downs
+%p
+  %b Score:
+  = @post.score
+%p
+  %b Over 18:
+  = @post.over_18
+%p
+  %b Is self:
+  = @post.is_self
+
+= link_to 'Edit', edit_post_path(@post)
+\|
+= link_to 'Back', posts_path

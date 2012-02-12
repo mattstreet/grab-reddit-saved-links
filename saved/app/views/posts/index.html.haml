@@ -1,0 +1,52 @@
+%h1 Listing posts
+=form_tag posts_path, :method => 'get' do
+  = text_field_tag :search, params[:search]
+  = submit_tag "Search", :name => nil
+
+%table
+  %tr
+    %th Title
+    %th Selftext html
+    %th Selftext
+    %th Author
+    %th Subreddit
+    %th Permalink
+    %th Url
+    %th Domain
+    %th Created utc
+    %th Num comments
+    %th Likes
+    %th Ups
+    %th Downs
+    %th Score
+    %th Over 18
+    %th Is self
+    %th
+    %th
+    %th
+
+  - @posts.each do |post|
+    %tr
+      %td= post.title
+      %td= post.selftext_html
+      %td= post.selftext
+      %td= post.author
+      %td= post.subreddit
+      %td= link_to post.permalink,"http://www.reddit.com#{post.permalink}"
+      %td= link_to post.url,post.url
+      %td= post.domain
+      %td= post.created_utc
+      %td= post.num_comments
+      %td= post.likes
+      %td= post.ups
+      %td= post.downs
+      %td= post.score
+      %td= post.over_18
+      %td= post.is_self
+      %td= link_to 'Show', post
+      %td= link_to 'Edit', edit_post_path(post)
+      %td= link_to 'Destroy', post, :confirm => 'Are you sure?', :method => :delete
+
+%br
+= will_paginate @posts
+= link_to 'New Post', new_post_path

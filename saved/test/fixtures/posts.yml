@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  name: MyString
+  selftext_html: MyString
+  selftext: MyString
+  author: MyString
+  subreddit: MyString
+  permalink: MyString
+  url: MyString
+  domain: MyString
+  created_utc: 2012-02-12
+  num_comments: 1
+  likes: false
+  ups: 1
+  downs: 1
+  score: 1
+  over_18: false
+  is_self: false
+
+two:
+  title: MyString
+  name: MyString
+  selftext_html: MyString
+  selftext: MyString
+  author: MyString
+  subreddit: MyString
+  permalink: MyString
+  url: MyString
+  domain: MyString
+  created_utc: 2012-02-12
+  num_comments: 1
+  likes: false
+  ups: 1
+  downs: 1
+  score: 1
+  over_18: false
+  is_self: false

@@ -1,0 +1,61 @@
+= form_for @post do |f|
+  -if @post.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@post.errors.count, "error")} prohibited this post from being saved:"
+      %ul
+        - @post.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :selftext_html
+    = f.text_field :selftext_html
+  .field
+    = f.label :selftext
+    = f.text_field :selftext
+  .field
+    = f.label :author
+    = f.text_field :author
+  .field
+    = f.label :subreddit
+    = f.text_field :subreddit
+  .field
+    = f.label :permalink
+    = f.text_field :permalink
+  .field
+    = f.label :url
+    = f.text_field :url
+  .field
+    = f.label :domain
+    = f.text_field :domain
+  .field
+    = f.label :created_utc
+    = f.date_select :created_utc
+  .field
+    = f.label :num_comments
+    = f.number_field :num_comments
+  .field
+    = f.label :likes
+    = f.check_box :likes
+  .field
+    = f.label :ups
+    = f.number_field :ups
+  .field
+    = f.label :downs
+    = f.number_field :downs
+  .field
+    = f.label :score
+    = f.number_field :score
+  .field
+    = f.label :over_18
+    = f.check_box :over_18
+  .field
+    = f.label :is_self
+    = f.check_box :is_self
+  .actions
+    = f.submit 'Save'
