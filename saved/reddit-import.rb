@@ -16,21 +16,14 @@ ActiveRecord::Base.establish_connection(dbconfig["development"])
 # Is this the best way to do this?
 class Post < ActiveRecord::Base
 end
+DBCOLUMNS = Post.column_names
 
-# How to iterate through and access each post
-# Post.all.each do |post|
-#   puts post.url
-# end
-
-# This needs to be a Thor task so it doesn't auto run
-# Make it loop through every page, with a default option to stop 
-# once it gets to a link it has read before.
-def login
+def login(password)
   agent = Mechanize.new
   agent.get('http://reddit.com') do |login_page|
       inside_page = login_page.form_with(:id => 'login_login-main') do |f|
           f.user = "mattstreet" # Needs CLI option
-          f.passwd = "JV!5vUV#Jn$QvbNS" # Needs CLI option and something more secure
+          f.passwd = password
           f.submit
       end
   end
@@ -39,12 +32,13 @@ end
 
 class App < Thor
 
-  desc "import", "download links saved on reddit"
-  method_option :password, :type => :string, :aliases => "-p"
+  desc "import", "download saved links"
+  method_option :replace, :type => :boolean
+  method_option :duplicate, :type => :boolean
+  method_option :password, :type => :string, :aliases => "-p", :required => true
   def import
-    puts "Password",options[:password]
-    exit
-    agent = login
+    puts "#{Post.count} records found"
+    agent = login(options['password'])
     after = ""
     last = ""
     while true do
@@ -53,31 +47,23 @@ class App < Thor
       page = JSON.parse(page.content)
       page['data']['children'].each do |link|
         data = link['data']
-        if !Post.where(:name => data['name'],
-                      :created_utc => data['created_utc']).empty? then
+        old_post = nil
+        if !options['duplicate'] then
+          old_post = Post.where(:name => data['name'],
+                                :created_utc => data['created_utc']).first
+        end
+        data = data.keep_if { |key,value| DBCOLUMNS.include? key }
+        if old_post and options['replace']
+          old_post.update_attributes(data)
+          puts "#{Post.count} | Replacing: #{old_post.url}"
+        elsif old_post
           puts "Reached old links"
           exit
+        else
+          post = Post.create(data)
+          puts "#{Post.count} | Creating: #{post.url}"
         end
-        post = Post.create do |p|
-          p.title              = data['title']
-          p.name               = data['name']
-          p.subreddit          = data['subreddit']
-          p.selftext_html      = data['selftext_html']
-          p.selftext           = data['selftext']
-          p.author             = data['author']
-          p.permalink          = data['permalink']
-          p.url                = data['url']
-          p.domain             = data['domain']
-          p.created_utc        = data['created_utc']
-          p.num_comments       = data['num_comments']
-          p.likes              = data['likes']
-          p.score              = data['score']
-          p.ups                = data['ups']
-          p.downs              = data['downs']
-          p.over_18            = data['over_18']
-          p.is_self            = data['is_self']
-        end
-        # pp post.title
+        # pp post.url # add back with verbose option?
       end
       if page['data']['after'].nil? then 
         puts page['data']['after']
