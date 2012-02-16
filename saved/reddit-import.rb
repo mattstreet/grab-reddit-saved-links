@@ -16,7 +16,6 @@ ActiveRecord::Base.establish_connection(dbconfig["development"])
 # Is this the best way to do this?
 class Post < ActiveRecord::Base
 end
-DBCOLUMNS = Post.column_names
 
 def login(password)
   agent = Mechanize.new
@@ -52,7 +51,7 @@ class App < Thor
           old_post = Post.where(:name => data['name'],
                                 :created_utc => data['created_utc']).first
         end
-        data = data.keep_if { |key,value| DBCOLUMNS.include? key }
+        data = data.keep_if { |key,value| Post.column_names.include? key }
         if old_post and options['replace']
           old_post.update_attributes(data)
           puts "#{Post.count} | Replacing: #{old_post.url}"
