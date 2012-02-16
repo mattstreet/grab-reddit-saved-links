@@ -17,11 +17,11 @@ ActiveRecord::Base.establish_connection(dbconfig["development"])
 class Post < ActiveRecord::Base
 end
 
-def login(password)
+def login(user,password)
   agent = Mechanize.new
   agent.get('http://reddit.com') do |login_page|
       inside_page = login_page.form_with(:id => 'login_login-main') do |f|
-          f.user = "mattstreet" # Needs CLI option
+          f.user = user
           f.passwd = password
           f.submit
       end
@@ -35,9 +35,10 @@ class App < Thor
   method_option :replace, :type => :boolean
   method_option :duplicate, :type => :boolean
   method_option :password, :type => :string, :aliases => "-p", :required => true
+  method_option :user, :type => :string, :aliases => "-u", :required => true
   def import
     puts "#{Post.count} records found"
-    agent = login(options['password'])
+    agent = login(options['user'],options['password'])
     after = ""
     last = ""
     while true do
@@ -73,6 +74,13 @@ class App < Thor
       pp last
       sleep(5)
     end
+  end
+
+  desc "list", "output stored links"
+  #method_option :duplicate, :type => :boolean
+  #method_option :password, :type => :string, :aliases => "-p", :required => true
+  
+  def list
   end
 end
 # Create task that accesses an already created database and
