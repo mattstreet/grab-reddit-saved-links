@@ -1,4 +1,6 @@
 Saved::Application.routes.draw do
+  resources :subreddits
+
   resources :users
 
   resources :posts

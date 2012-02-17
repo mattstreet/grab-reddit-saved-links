@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120216010527) do
+ActiveRecord::Schema.define(:version => 20120217004949) do
 
   create_table "posts", :force => true do |t|
     t.integer  "user_id"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(:version => 20120216010527) do
     t.string   "selftext_html"
     t.string   "selftext"
     t.string   "author"
-    t.string   "subreddit"
+    t.integer  "subreddit_id"
     t.string   "permalink"
     t.string   "url"
     t.string   "domain"
@@ -34,6 +34,13 @@ ActiveRecord::Schema.define(:version => 20120216010527) do
     t.boolean  "is_self"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+  end
+
+  create_table "subreddits", :force => true do |t|
+    t.string   "name"
+    t.string   "subreddit_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "users", :force => true do |t|

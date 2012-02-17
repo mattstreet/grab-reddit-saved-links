@@ -18,6 +18,8 @@ class Post < ActiveRecord::Base
 end
 class User < ActiveRecord::Base
 end
+class Subreddit < ActiveRecord::Base
+end
 
 def login(user,password)
   agent = Mechanize.new
@@ -52,6 +54,8 @@ class App < Thor
       page['data']['children'].each do |link|
         data = link['data']
         data['user_id'] = user.id
+        data['subreddit_id'] = Subreddit.find_or_create_by_name(data['subreddit']).id
+        puts data['subreddit_id']
         old_post = nil
         if !options['duplicate'] then
           old_post = Post.where(:user_id => user.id,:name => data['name'],
@@ -83,6 +87,10 @@ class App < Thor
   method_option :users, :type => :string, :aliases => "-u"
   method_option :subreddits, :type => :string, :aliases => "-s"
   method_option :urls, :type => :boolean, :aliases => "-l", :default => true
+  method_option :subreddits, :type => :string, :aliases => "-s"
+  method_option :authors, :type => :string, :aliases => "-a"
+  method_option :domains, :type => :string, :aliases => "-d"
+  method_option :nsfw, :type => :boolean
   method_option :perma, :type => :boolean, :aliases => "-c", :default => false
   def list
     all_users = options['users'].nil?
@@ -101,10 +109,7 @@ end
 # JSON (could warn about memory usage)
 # HTML verbose or short
 # Bookmarks format
-# Filter by subreddits
-# Filter by domain
-# Filter by author
-# Filter by score,comments, over_18
+# Filter by score,comments
 # Create only one file or multiple?
 # Delete by filter or delete all but filter
 

@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @subreddit.name
+%p
+  %b Subreddit:
+  = @subreddit.subreddit_id
+
+= link_to 'Edit', edit_subreddit_path(@subreddit)
+\|
+= link_to 'Back', subreddits_path

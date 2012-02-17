@@ -7,7 +7,7 @@ class CreatePosts < ActiveRecord::Migration
       t.string :selftext_html
       t.string :selftext
       t.string :author
-      t.string :subreddit
+      t.references :subreddit
       t.string :permalink
       t.string :url
       t.string :domain
